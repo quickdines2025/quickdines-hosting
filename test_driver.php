@@ -1,0 +1,20 @@
+<?php
+require __DIR__ . "/vendor/autoload.php"; 
+$app = require_once __DIR__ . "/bootstrap/app.php"; 
+$app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap(); 
+$request = new \Illuminate\Http\Request(); 
+$request->merge(["name" => "testdr", "mobile" => "1212121212", "password" => "password123", "email" => "testdr@test.com"]); 
+$user = new \App\Models\User(); 
+$user->name = $request->name; 
+$user->mobile = $request->mobile; 
+$user->email = $request->email; 
+$user->password = bcrypt($request->password); 
+$user->role = "driver"; 
+$user->status = "active"; 
+$user->save(); 
+$driver = new \App\Models\Driver(); 
+$driver->user_id = $user->id; 
+$driver->name = $user->name; 
+$driver->mobile = $user->mobile; 
+$driver->save(); 
+echo "success";
